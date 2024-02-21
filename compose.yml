@@ -1,0 +1,35 @@
+services:
+  db:
+    image: 'postgres:15.2'
+    env_file: .env
+    ports:
+      - ${DB_PORT_ON_HOST}:${DB_PORT_ON_CONTAINER}
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@host.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - '5050:5050'
+    links:
+      - db
+    depends_on:
+      - db
+
+  api:
+    build:
+      context: .
+    container_name: ecomerce-api
+    env_file: .env
+    volumes:
+      - ./:/app
+    command: ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:${DEBUG_PORT_ON_CONTAINER}"
+    ports:
+      - ${API_PORT_ON_HOST}:${API_PORT_ON_CONTAINER}
+      - ${DEBUG_PORT_ON_DOCKER_HOST}:${DEBUG_PORT_ON_CONTAINER}
+    links:
+      - db
+    depends_on:
+      - db
