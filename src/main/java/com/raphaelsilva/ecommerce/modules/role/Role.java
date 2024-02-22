@@ -35,4 +35,11 @@ public class Role {
   public Role(String name) {
     this.name = name;
   }
+
+  public Role(UUID id, String name, LocalDateTime created_at, LocalDateTime updated_at) {
+    this.id = id;
+    this.name = name;
+    this.created_at = created_at;
+    this.updated_at = updated_at;
+  }
 }
