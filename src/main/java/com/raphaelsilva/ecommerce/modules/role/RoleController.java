@@ -31,19 +31,19 @@ public class RoleController {
   @GetMapping("/all")
   public ResponseEntity<List<Role>> getAll(){
     List<Role> allRoles = roleService.getAll();
-    return ResponseEntity.ok().body(allRoles);
+    return ResponseEntity.ok(allRoles);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<Role> getRoleByIdRole(@PathVariable(name = "id") String roleId) {
     Role role = roleService.getById(roleId);
-    return ResponseEntity.ok().body(role);
+    return ResponseEntity.ok(role);
   }
 
   @GetMapping()
   public ResponseEntity<Role> getRoleByName(@RequestParam(name = "name") String name) {
     Role role = roleService.getByName(name);
-    return ResponseEntity.ok().body(role);
+    return ResponseEntity.ok(role);
   }
 
   @PostMapping()
@@ -54,7 +54,7 @@ public class RoleController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Role> putMethodName(@PathVariable String id, @RequestBody CreateRoleRequest roleRequest) {
+  public ResponseEntity<Role> updateRole(@PathVariable String id, @RequestBody CreateRoleRequest roleRequest) {
     Role updatedRole = roleService.update(roleRequest, id);
     return ResponseEntity.ok().body(updatedRole);
   }
