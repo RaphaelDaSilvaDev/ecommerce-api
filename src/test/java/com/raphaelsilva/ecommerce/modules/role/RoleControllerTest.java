@@ -35,7 +35,7 @@ public class RoleControllerTest {
 
   private UUID id = UUID.fromString("0912df66-ad8e-4923-bc9e-c2e8d82b6dbb");
   private String name = "ADMIN";
-  private Role role = new Role(id, name, LocalDateTime.now(), LocalDateTime.now());
+  private Role role = new Role(id, name, LocalDateTime.parse( "2024-02-27T11:08:23.1049963"), LocalDateTime.parse( "2024-02-27T11:08:23.1049963"));
 
   @Test
   @DisplayName("Should be able to create a role")
@@ -44,7 +44,7 @@ public class RoleControllerTest {
 
     Mockito.when(roleService.create(request)).thenReturn(role);
     
-    mockMvc.perform(post("/api/role").contentType(MediaType.APPLICATION_JSON).content("{ \"name\": \"Admin\"}")).andDo(print()).andExpect(status().isCreated());
+    mockMvc.perform(post("/api/role").contentType(MediaType.APPLICATION_JSON).content("{ \"name\": \"ADMIN\"}")).andDo(print()).andExpect(status().isCreated());
   }
 
   @Test
@@ -60,7 +60,7 @@ public class RoleControllerTest {
 
     Mockito.when(roleService.getAll()).thenReturn(roles);
 
-    mockMvc.perform(get("/api/role/all")).andDo(print()).andExpect(status().isOk()).andExpect(content().json("[{\"id\":0912df66-ad8e-4923-bc9e-c2e8d82b6dbb,\"name\":ADMIN,\"created_at\":null,\"updated_at\":null}]"));
+    mockMvc.perform(get("/api/role/all")).andDo(print()).andExpect(status().isOk()).andExpect(content().json("[{\"id\":\"0912df66-ad8e-4923-bc9e-c2e8d82b6dbb\",\"name\":\"ADMIN\",\"created_at\":\"2024-02-27T11:08:23.1049963\",\"updated_at\":\"2024-02-27T11:08:23.1049963\"}]"));
   }
 
   @Test
@@ -76,7 +76,7 @@ public class RoleControllerTest {
   void testGetRoleByName() throws Exception {
     Mockito.when(roleService.getByName(name)).thenReturn(role);
 
-    mockMvc.perform(get("/api/role", name)).andDo(print()).andExpect(status().isOk());
+    mockMvc.perform(get("/api/role").param("name", name)).andDo(print()).andExpect(status().isOk()).andExpect(content().json("{\"id\":\"0912df66-ad8e-4923-bc9e-c2e8d82b6dbb\",\"name\":\"ADMIN\",\"created_at\":\"2024-02-27T11:08:23.1049963\",\"updated_at\":\"2024-02-27T11:08:23.1049963\"}"));
   }
 
   @Test
@@ -87,6 +87,6 @@ public class RoleControllerTest {
     role.setName(newName);
     Mockito.when(roleService.update(request, id.toString())).thenReturn(role);
 
-    mockMvc.perform(put("/api/role").contentType(MediaType.APPLICATION_JSON).content("{\"name\": \"User\"}").accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.name").value(newName));
+    mockMvc.perform(put("/api/role/{id}", id).contentType(MediaType.APPLICATION_JSON).content("{\"name\": \"User\"}").accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.name").value(newName));
   }
 }
