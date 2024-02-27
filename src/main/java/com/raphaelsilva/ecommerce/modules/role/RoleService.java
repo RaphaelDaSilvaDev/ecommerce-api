@@ -31,7 +31,7 @@ public class RoleService {
   }
 
   public Role getByName(String name){
-    return roleRepository.findByNameIgnoreCase(name).orElseThrow(() -> {throw new NotFoundException(notFoundMessage);});
+    return roleRepository.findByNameIgnoreCaseContains(name).orElseThrow(() -> {throw new NotFoundException(notFoundMessage);});
   }
 
   public Role create(CreateRoleRequest roleRequest){
